@@ -53,42 +53,36 @@
 ;;
 ;;; Code:
 
-(defvar fcl-margin-bitmap 'vertical-bar
-  "Bitmap to indicate current line.")
-
 ;;; internal variable
-(defvar fcl-margin-overlay nil
-  "Hold an overlay for the margin bitmap.")
-(make-variable-buffer-local 'fcl-margin-overlay)
+(defvar mcl/margin-overlay nil
+  "Hold an overlay for the margin placeholder.")
+(make-variable-buffer-local 'mcl/margin-overlay)
 
-(defun fcl-display-margin-bitmap-at-current-line ()
+(defun mcl/display-margin-marker-at-current-line ()
   (let ((s "x")
         (point (point)))
-    (fcl-clear-margin-bitmap)
-    ;; Somehow the cursor disappears at the end of the buffer if the last line is empty.
-    ;; So don't display the bitmap on the margin in that case.
-    (unless nil ;(and (eobp) (bolp))
-      (setq fcl-margin-overlay (make-overlay point (1+ point)))
-      (overlay-put fcl-margin-overlay 'priority 137)
-      (put-text-property 0 1 'display `((margin left-margin)
-                                        ,(propertize "▶" 'face 'default)) s)
-                                        ;(put-text-property 0 1 'display (list 'left-margin fcl-margin-bitmap) s)
-      (overlay-put fcl-margin-overlay 'before-string s))))
+    (mcl/clear-margin-marker)
+    (setq mcl/margin-overlay (make-overlay point (1+ point)))
+    (overlay-put mcl/margin-overlay 'priority 137)
+    (put-text-property 0 1 'display `((margin left-margin)
+                                      ,(propertize "▶" 'face 'default)) s)
+    (overlay-put mcl/margin-overlay 'before-string s)))
 
-(defun fcl-clear-margin-bitmap ()
-  (when fcl-margin-overlay
-    (delete-overlay fcl-margin-overlay)
-    (setq fcl-margin-overlay nil)))
+
+(defun mcl/clear-margin-marker ()
+  (when mcl/margin-overlay
+    (delete-overlay mcl/margin-overlay)
+    (setq mcl/margin-overlay nil)))
 
 (defun margin-current-line-mode-on ()
-  (add-hook 'pre-command-hook 'fcl-clear-margin-bitmap)
-  (add-hook 'post-command-hook 'fcl-display-margin-bitmap-at-current-line nil t)
+  (add-hook 'pre-command-hook 'mcl/clear-margin-marker)
+  (add-hook 'post-command-hook 'mcl/display-margin-marker-at-current-line nil t)
   )
 
 (defun margin-current-line-mode-off ()
-  (fcl-clear-margin-bitmap)
-  (remove-hook 'pre-command-hook 'fcl-clear-margin-bitmap t)
-  (remove-hook 'post-command-hook 'fcl-display-margin-bitmap-at-current-line t)
+  (mcl/clear-margin-marker)
+  (remove-hook 'pre-command-hook 'mcl/clear-margin-marker t)
+  (remove-hook 'post-command-hook 'mcl/display-margin-marker-at-current-line t)
   )
 
 (define-minor-mode margin-current-line-mode
