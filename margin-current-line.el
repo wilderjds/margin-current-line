@@ -51,11 +51,6 @@
 ;;
 ;;   You can toggle it by running `M-x global-margin-current-line-mode'.
 ;;
-;;
-;; ## Limitation
-;;
-;; The indicator is not shown if the cursor is at the end of the buffer and the last line is empty.
-;;
 ;;; Code:
 
 (defvar fcl-margin-bitmap 'vertical-bar
