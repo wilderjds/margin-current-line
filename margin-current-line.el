@@ -82,8 +82,7 @@
 (defun margin-current-line-mode-off ()
   (mcl/clear-margin-marker)
   (remove-hook 'pre-command-hook 'mcl/clear-margin-marker t)
-  (remove-hook 'post-command-hook 'mcl/display-margin-marker-at-current-line t)
-  )
+  (remove-hook 'post-command-hook 'mcl/display-margin-marker-at-current-line t))
 
 (define-minor-mode margin-current-line-mode
   "Indicate current line on the margin."
