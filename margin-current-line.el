@@ -64,6 +64,7 @@
     (mcl/clear-margin-marker)
     (setq mcl/margin-overlay (make-overlay point (1+ point)))
     (overlay-put mcl/margin-overlay 'priority 137)
+    (overlay-put mcl/margin-overlay 'evaporate t)
     (put-text-property 0 1 'display `((margin left-margin)
                                       ,(propertize "▶" 'face 'default)) s)
     (overlay-put mcl/margin-overlay 'before-string s)))
